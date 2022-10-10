@@ -62,7 +62,7 @@ public class JsonUtil {
         // LocalDateTime用のシリアライザを追加
         var javaTimeModule = new JavaTimeModule();
         javaTimeModule.addSerializer(LocalDateTime.class,
-                new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss")));
         mapper.registerModule(javaTimeModule);
 
         return mapper;
