@@ -10,12 +10,12 @@ import lombok.Data;
 public class TodoItem {
 
     /** 内容 */
-    private String content;
+    final private String content;
 
     /** 完了フラグ */
-    private boolean done;
+    final private boolean done;
 
     /** 作成日時 */
-    private LocalDateTime createdAt;
+    final private LocalDateTime createdAt;
 
 }
