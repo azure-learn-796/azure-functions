@@ -24,7 +24,7 @@ public class FunctionTest {
     public void testHttpTriggerJava() throws Exception {
         // Setup
         @SuppressWarnings("unchecked")
-        final HttpRequestMessage<Optional<TodoItem>> req = mock(HttpRequestMessage.class);
+        final HttpRequestMessage<Optional<String>> req = mock(HttpRequestMessage.class);
 
         final Map<String, String> queryParams = new HashMap<>();
         queryParams.put("name", "Azure");
