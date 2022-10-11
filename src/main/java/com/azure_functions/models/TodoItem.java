@@ -9,6 +9,9 @@ import lombok.Data;
 @Builder
 public class TodoItem {
 
+    /** ID */
+    final private int id;
+
     /** 内容 */
     final private String content;
 

@@ -1,5 +1,6 @@
 package com.azure_functions;
 
+import com.azure_functions.db.SqlSessionManager;
 import com.azure_functions.models.TodoItem;
 import com.azure_functions.services.TodoService;
 import com.azure_functions.utils.JsonUtil;
@@ -37,7 +38,8 @@ public class Function {
                 context.getLogger().info("Java HTTP trigger processed a request.");
 
                 // TODO一覧取得
-                var todoService = new TodoService(context);
+                var sqlSessionManager = new SqlSessionManager(context);
+                var todoService = new TodoService(context, sqlSessionManager);
                 List<TodoItem> todoItems = todoService.fetchTodoItems();
 
                 // TODO一覧をJSONに変換

@@ -1,7 +1,9 @@
 package com.azure_functions.services;
 
-import java.time.LocalDateTime;
 import java.util.List;
+
+import com.azure_functions.db.SqlSessionManager;
+import com.azure_functions.mappers.TodoItemMapper;
 import com.azure_functions.models.TodoItem;
 import com.microsoft.azure.functions.ExecutionContext;
 
@@ -16,6 +18,9 @@ public class TodoService {
         /** 実行コンテキスト */
         private final ExecutionContext context;
 
+        /** SQLセッション管理 */
+        private final SqlSessionManager sqlSessionManager;
+
         /**
          * TODO一覧を取得
          * 
@@ -23,23 +28,12 @@ public class TodoService {
          */
         public List<TodoItem> fetchTodoItems() {
                 context.getLogger().info("fetchTodoItems");
-                // ダミーデータ生成
-                List<TodoItem> todoItems = List.of(
-                                TodoItem.builder()
-                                                .content("Azureの勉強")
-                                                .done(false)
-                                                .createdAt(LocalDateTime.now())
-                                                .build(),
-                                TodoItem.builder()
-                                                .content("Javaの勉強")
-                                                .done(true)
-                                                .createdAt(LocalDateTime.now())
-                                                .build(),
-                                TodoItem.builder()
-                                                .content("TypeScriptの勉強")
-                                                .done(false)
-                                                .createdAt(LocalDateTime.now())
-                                                .build());
+
+                // DBからTODO一覧取得
+                List<TodoItem> todoItems = sqlSessionManager.transaction(sqlSession -> {
+                        TodoItemMapper todoItemMapper = sqlSession.getMapper(TodoItemMapper.class);
+                        return todoItemMapper.selectTodo();
+                });
 
                 return todoItems;
         }

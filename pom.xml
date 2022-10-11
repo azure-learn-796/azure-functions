@@ -14,7 +14,8 @@
         <java.version>11</java.version>
         <azure.functions.maven.plugin.version>1.21.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>2.0.1</azure.functions.java.library.version>
-        <functionAppName>azure-functions-20221008012756599</functionAppName>
+        <functionAppName>azure-learn-functions796</functionAppName>
+        <skipTests>true</skipTests>
     </properties>
 
     <dependencies>
@@ -36,6 +37,20 @@
             <groupId>com.azure</groupId>
             <artifactId>azure-core-serializer-json-jackson</artifactId>
             <version>1.2.22</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.5.11</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.30</version>
         </dependency>
 
         <!-- Test -->
