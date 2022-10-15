@@ -3,6 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.azure_functions.mappers.TodoItemMapper">
+  <!-- TODO一覧取得 -->
   <select id="selectTodo" resultType="TodoItem">
     select
         id
@@ -12,4 +13,33 @@
     from
       todo
   </select>
+  <!-- TODO登録 -->
+  <insert id="insertTodo" parameterType="TodoItem">
+    insert into
+      todo (
+        content
+      ) 
+      values (
+          #{ content }
+      )
+  </insert>
+  <!-- TODO更新 -->
+  <update id="updateTodo" parameterType="TodoItem">
+    update
+      todo
+    set
+        content = #{ content }
+      , done    = #{ done }
+    <where>
+      id = #{ id }
+    </where>
+  </update>
+  <!-- TODO削除 -->
+  <update id="deleteTodo" parameterType="Integer">
+    delete
+    from
+      todo
+    where
+      id = #{ id }
+  </update>
 </mapper>

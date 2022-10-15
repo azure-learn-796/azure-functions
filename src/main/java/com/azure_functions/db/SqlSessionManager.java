@@ -1,18 +1,15 @@
 package com.azure_functions.db;
 
+import com.microsoft.azure.functions.ExecutionContext;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Properties;
 import java.util.function.Function;
-
+import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-
-import com.microsoft.azure.functions.ExecutionContext;
-
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class SqlSessionManager {
@@ -31,9 +28,9 @@ public class SqlSessionManager {
     mybatisProps.put("password", System.getenv("MYSQL_PASSWORD"));
 
     try (Reader config = Resources.getResourceAsReader("mybatis-config.xml")) {
-      SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(config, mybatisProps);
+      SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder()
+      .build(config, mybatisProps);
       return sqlSessionFactory;
-
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -41,7 +38,7 @@ public class SqlSessionManager {
 
   /**
    * 指定したステートメントをトランザクション内で実行する
-   * 
+   *
    * @param <R>       戻り値の型
    * @param statement ステートメント
    * @return SQL実行結果
@@ -56,9 +53,13 @@ public class SqlSessionManager {
       sqlSession.commit();
 
       return result;
-
     } catch (Exception e) {
-      context.getLogger().severe("ステートメントの実行に失敗しました。エラーメッセージ：" + e.getMessage());
+      context
+        .getLogger()
+        .severe(
+          "ステートメントの実行に失敗しました。エラーメッセージ：" +
+          e.getMessage()
+        );
 
       // ロールバック
       sqlSession.rollback();
@@ -66,5 +67,4 @@ public class SqlSessionManager {
       throw e;
     }
   }
-
 }
