@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-// @Builder
-// @JsonDeserialize(builder = TodoItem.TodoItemBuilder.class)
 @AllArgsConstructor
 @NoArgsConstructor
 public class TodoItem {
@@ -23,6 +21,4 @@ public class TodoItem {
 
   /** 作成日時 */
   private LocalDateTime createdAt;
-  // @JsonPOJOBuilder(withPrefix = "")
-  // public static class TodoItemBuilder {}
 }
