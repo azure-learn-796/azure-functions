@@ -15,6 +15,16 @@
   </select>
   <!-- TODO登録 -->
   <insert id="insertTodo" parameterType="TodoItem">
+    <selectKey resultType="TodoItem" keyProperty="id,content,createdAt" order="AFTER">
+      select
+         id
+        ,'abcd' as content
+        ,created_at
+      from
+        todo
+      where
+        id = last_insert_id()
+    </selectKey>
     insert into
       todo (
         content

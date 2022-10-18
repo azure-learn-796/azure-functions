@@ -85,9 +85,14 @@ public class Function {
     var todoService = new TodoService(context, sqlSessionManager);
     todoService.insertTodo(todo);
 
+    // TODO一覧をJSONに変換
+    var jsonUtil = new JsonUtil(context);
+    String json = jsonUtil.serialize(todo);
+
     return request
       .createResponseBuilder(HttpStatus.OK)
       .header("Content-Type", "application/json;")
+      .body(json)
       .build();
   }
 

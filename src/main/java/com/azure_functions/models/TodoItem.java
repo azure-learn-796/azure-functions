@@ -1,14 +1,15 @@
 package com.azure_functions.models;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.time.LocalDateTime;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Builder
-@JsonDeserialize(builder = TodoItem.TodoItemBuilder.class)
+// @Builder
+// @JsonDeserialize(builder = TodoItem.TodoItemBuilder.class)
+@AllArgsConstructor
+@NoArgsConstructor
 public class TodoItem {
 
   /** ID */
@@ -22,7 +23,6 @@ public class TodoItem {
 
   /** 作成日時 */
   private LocalDateTime createdAt;
-
-  @JsonPOJOBuilder(withPrefix = "")
-  public static class TodoItemBuilder {}
+  // @JsonPOJOBuilder(withPrefix = "")
+  // public static class TodoItemBuilder {}
 }
