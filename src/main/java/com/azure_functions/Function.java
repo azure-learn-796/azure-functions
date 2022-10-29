@@ -1,5 +1,6 @@
 package com.azure_functions;
 
+import com.azure.core.util.UrlBuilder;
 import com.azure_functions.db.SqlSessionManager;
 import com.azure_functions.models.TodoItem;
 import com.azure_functions.services.TodoService;
@@ -13,8 +14,13 @@ import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.BindingName;
 import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
+import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Azure Functions with HTTP Trigger.
@@ -92,10 +98,7 @@ public class Function {
     return request
       .createResponseBuilder(HttpStatus.CREATED)
       .header("Content-Type", "application/json;")
-      .header(
-        "Location",
-        String.format("%s/%d", request.getUri().toString(), todo.getId())
-      )
+      .header("Location", expandUriPath(request.getUri(), todo.getId()))
       .body(json)
       .build();
   }
@@ -189,5 +192,17 @@ public class Function {
     System.out.println(obj);
 
     return obj;
+  }
+
+  private static String expandUriPath(URI uri, Object... paths) {
+    String expandedPath = Stream
+      .concat(
+        Stream.of(uri.getPath().replaceFirst("/$", "")),
+        Arrays.stream(paths).map(Objects::toString)
+      )
+      .filter(Objects::nonNull)
+      .collect(Collectors.joining("/"));
+
+    return UrlBuilder.parse(uri.toString()).setPath(expandedPath).toString();
   }
 }
