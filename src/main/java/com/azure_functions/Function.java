@@ -35,8 +35,8 @@ public class Function {
       methods = { HttpMethod.GET },
       // 承認レベルをFUNCTIONに変更（APIキーが必要となる）
       authLevel = AuthorizationLevel.FUNCTION,
-      // エンドポイントを「/api/todo/list」に設定
-      route = "todo/list"
+      // エンドポイントを「/api/todos」に設定
+      route = "todos"
     ) HttpRequestMessage<Optional<String>> request,
     final ExecutionContext context
   ) {
@@ -71,8 +71,8 @@ public class Function {
       name = "req",
       methods = { HttpMethod.POST },
       authLevel = AuthorizationLevel.FUNCTION,
-      // エンドポイントを「/api/todo/create」に設定
-      route = "todo/create"
+      // エンドポイントを「/api/todos」に設定
+      route = "todos"
     ) HttpRequestMessage<Optional<String>> request,
     final ExecutionContext context
   ) {
@@ -90,8 +90,12 @@ public class Function {
     String json = jsonUtil.serialize(todo);
 
     return request
-      .createResponseBuilder(HttpStatus.OK)
+      .createResponseBuilder(HttpStatus.CREATED)
       .header("Content-Type", "application/json;")
+      .header(
+        "Location",
+        String.format("%s/%d", request.getUri().toString(), todo.getId())
+      )
       .body(json)
       .build();
   }
@@ -107,10 +111,10 @@ public class Function {
   public HttpResponseMessage updateTodoItem(
     @HttpTrigger(
       name = "req",
-      methods = { HttpMethod.PUT },
+      methods = { HttpMethod.PATCH },
       authLevel = AuthorizationLevel.FUNCTION,
-      // エンドポイントを「/api/todo/update」に設定
-      route = "todo/{id:int}/update"
+      // エンドポイントを「/api/todos/<id>」に設定
+      route = "todos/{id:int}"
     ) HttpRequestMessage<Optional<String>> request,
     final ExecutionContext context,
     // パスのidをバインド
@@ -125,10 +129,7 @@ public class Function {
     var todoService = new TodoService(context, sqlSessionManager);
     todoService.updateTodo(id, todo);
 
-    return request
-      .createResponseBuilder(HttpStatus.OK)
-      .header("Content-Type", "application/json;")
-      .build();
+    return request.createResponseBuilder(HttpStatus.NO_CONTENT).build();
   }
 
   /**
@@ -144,8 +145,8 @@ public class Function {
       name = "req",
       methods = { HttpMethod.DELETE },
       authLevel = AuthorizationLevel.FUNCTION,
-      // エンドポイントを「/api/todo/<id>/delete」に設定
-      route = "todo/{id:int}/delete"
+      // エンドポイントを「/api/todos/<id>」に設定
+      route = "todos/{id:int}"
     ) HttpRequestMessage<Optional<String>> request,
     final ExecutionContext context,
     // パスのidをバインド
@@ -158,10 +159,7 @@ public class Function {
     var todoService = new TodoService(context, sqlSessionManager);
     todoService.deleteTodo(id);
 
-    return request
-      .createResponseBuilder(HttpStatus.OK)
-      .header("Content-Type", "application/json;")
-      .build();
+    return request.createResponseBuilder(HttpStatus.NO_CONTENT).build();
   }
 
   /**
